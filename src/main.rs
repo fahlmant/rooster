@@ -1,3 +1,8 @@
+extern crate getopts;
+use std::env;
+
 fn main() {
-    println!("Hello, world!");
+    if let Some(arg1) = env::args().nth(1) {
+        println!("The first argument is {}", arg1);
+    }
 }
