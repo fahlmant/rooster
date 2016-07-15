@@ -1,0 +1,4 @@
+[package]
+name = "rooster"
+version = "0.1.0"
+authors = ["Taylor Fahlman <fahlmantaylor@gmail.com>"]
