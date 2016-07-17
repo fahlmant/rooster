@@ -2,20 +2,24 @@ extern crate getopts;
 use getopts::Options;
 use std::env;
 use std::io::prelude::*;
+use std::io::SeekFrom;
 use std::fs::File;
 use std::process;
 
 static ROO_HEADER: &'static str = "!<rooster>\n";
 
-fn check_header() {
+fn check_header(mut file: File) {
 
+    file.seek(SeekFrom::Start(0));
 }
 
 fn archive() {
 
     //Create archive file with file_name
     let mut archive_file = File::create("test.roo").unwrap();
-    archive_file.write(ROO_HEADER.as_bytes());
+    let result = archive_file.write(ROO_HEADER.as_bytes());
+    check_header(archive_file);
+
 }
 /*
 fn extract() {
@@ -38,7 +42,7 @@ fn table_of_contents() {
 fn main() {
 
     let args: Vec<String> = env::args().collect();
-    let program = args[0].clone();
+    //let program = args[0].clone();
 
     let mut opts = Options::new();
     /*Options available
@@ -80,7 +84,7 @@ fn main() {
     }
 
     let output = matches.opt_str("a");
-    let input = if !matches.free.is_empty() {
+    if !matches.free.is_empty() {
         archive();
     }
     else {
