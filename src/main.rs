@@ -25,6 +25,7 @@ fn main() {
     opts.optflag("V", "Version", "Version 0.1.0");
     opts.optflag("h", "help", "Prints this help menu");
 
+
     //Opt opt Options
 
     //Block to ensure the option exists
@@ -44,6 +45,4 @@ fn main() {
         println!("{}", brief);
         process::exit(1);
     }
-
-
 }
