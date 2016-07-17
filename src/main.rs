@@ -1,9 +1,19 @@
 extern crate getopts;
 use getopts::Options;
 use std::env;
+use std::io::prelude::*;
+use std::fs::File;
 use std::process;
 
+fn check_header() {
+
+}
+
 fn archive() {
+
+    //Create archive file with file_name
+    let mut archive_file = File::open("test.roo");
+
 
 }
 
