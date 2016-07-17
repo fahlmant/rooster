@@ -3,6 +3,27 @@ use getopts::Options;
 use std::env;
 use std::process;
 
+fn archive() {
+
+}
+
+fn extract() {
+
+}
+
+fn remove() {
+
+}
+
+fn help() {
+
+}
+
+fn table_of_contents() {
+
+}
+
+
 fn main() {
 
     let args: Vec<String> = env::args().collect();
