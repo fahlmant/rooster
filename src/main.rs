@@ -17,7 +17,7 @@ fn archive() {
     let mut archive_file = File::create("test.roo").unwrap();
     archive_file.write(ROO_HEADER.as_bytes());
 }
-
+/*
 fn extract() {
 
 }
@@ -33,7 +33,7 @@ fn help() {
 fn table_of_contents() {
 
 }
-
+*/
 
 fn main() {
 
