@@ -2,7 +2,7 @@ extern crate getopts;
 use getopts::Options;
 use std::env;
 use std::process;
-
+/*
 fn archive() {
 
 }
@@ -22,7 +22,7 @@ fn help() {
 fn table_of_contents() {
 
 }
-
+*/
 
 fn main() {
 
