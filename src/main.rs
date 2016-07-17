@@ -5,6 +5,8 @@ use std::io::prelude::*;
 use std::fs::File;
 use std::process;
 
+static ROO_HEADER: &'static str = "!<rooster>\n";
+
 fn check_header() {
 
 }
@@ -12,9 +14,8 @@ fn check_header() {
 fn archive() {
 
     //Create archive file with file_name
-    let mut archive_file = File::open("test.roo");
-
-
+    let mut archive_file = File::create("test.roo").unwrap();
+    archive_file.write(ROO_HEADER.as_bytes());
 }
 
 fn extract() {
@@ -80,7 +81,7 @@ fn main() {
 
     let output = matches.opt_str("a");
     let input = if !matches.free.is_empty() {
-        matches.free[0].clone()
+        archive();
     }
     else {
         println!("Usage: rooster -a <archive_name>.roo <files_to_archive>");
