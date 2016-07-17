@@ -8,9 +8,12 @@ use std::process;
 
 static ROO_HEADER: &'static str = "!<rooster>\n";
 
-fn check_header(mut file: File) {
+fn check_header(mut file: File) -> i32{
 
     file.seek(SeekFrom::Start(0));
+    //If header is present and correct
+    return 1;
+    //Else return 2
 }
 
 fn archive() {
@@ -18,7 +21,14 @@ fn archive() {
     //Create archive file with file_name
     let mut archive_file = File::create("test.roo").unwrap();
     let result = archive_file.write(ROO_HEADER.as_bytes());
-    check_header(archive_file);
+    let check = check_header(archive_file);
+    if (check != 1) {
+        println!("Writing header failed. Aborting.");
+        process::exit(1);
+    }
+    else{
+        println!("Header wrote sucessfully");
+    }
 
 }
 /*
