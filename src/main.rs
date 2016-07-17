@@ -38,13 +38,11 @@ fn main() {
         let brief = format!("Version 0.1.0");
         println!("{}", brief);
         process::exit(1);
-        return;
     }
     if matches.opt_present("h") {
         let brief = format!("Help info");
         println!("{}", brief);
         process::exit(1);
-        return;
     }
 
 
