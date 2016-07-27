@@ -9,7 +9,7 @@ Options
 Archive (-a)
 ------------
 
-Usage: rooster -a <archive_name>.roo <files_to_archive>
+Usage: `rooster -a <archive_name>.roo <files_to_archive>`
 
 
 
