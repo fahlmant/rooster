@@ -1,5 +1,9 @@
-# rooster
+# Rooster
 
-This is a test
+Rooster is a rust archiving tool. The name comes from a kind of portmanteau
+of `rust` and `tar`. 
 
-Rooster is a rust archiving tool
+Options
+-------
+
+
