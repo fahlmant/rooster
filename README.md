@@ -73,7 +73,7 @@ Displays the table of contents of an archive.
 
 Usage: `rooster -t <archive_name>.roo`
 
-The short table of contents shows the drictories and files in an archive.
+The short table of contents shows the directories and files in an archive.
 
 Long Table of Contents (-T)
 ---------------------------
@@ -81,6 +81,10 @@ Long Table of Contents (-T)
 Displays the long table of contents of an archive.
 
 Usage: `rooster -T <archive_name>.roo`
+
+The long table of contents shows the directores and files in an archive, as 
+well as file size, permissions, file owner and group, as create/access/modify
+dates.
 
 Version (-V)
 ------------
