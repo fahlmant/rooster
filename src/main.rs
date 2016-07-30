@@ -17,7 +17,7 @@ fn check_header(mut file: File) -> i32 {
     let mut buffer = [0; ROO_HEAD_LEN];
     file.seek(SeekFrom::Start(0));
     file.read_exact(&mut buffer);
-    let buffer = str::from_utf8(&buffer).unwrap();
+    let mut buffer = str::from_utf8(&buffer).unwrap();
     println!("Buffer: {}", buffer);
     buffer = ROO_HEADER;
     println!(" {} ", ROO_HEADER == buffer);
