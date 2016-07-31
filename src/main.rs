@@ -12,24 +12,20 @@ static ROO_HEADER: &'static str = "!<rooster>\n";
 //Rooster header byte length
 const ROO_HEAD_LEN: usize = 11;
 
-fn check_header(mut file: File) -> i32 {
+fn check_header<R: Read>(mut input: R, mut file: File) -> Result<(),()>{
 
-    let mut buffer = [0; ROO_HEAD_LEN];
+    let mut buffer = [0; 11];
     file.seek(SeekFrom::Start(0));
     file.read_exact(&mut buffer);
     let mut buffer = str::from_utf8(&buffer).unwrap();
     println!("Buffer: {}", buffer);
-    buffer = ROO_HEADER;
+//    buffer = ROO_HEADER;
     println!(" {} ", ROO_HEADER == buffer);
     //If the header exists and is correct
-    if(ROO_HEADER == buffer)
-    {
-        return 1;
-    }
-    //Else return 2
-    else 
-    {
-        return 2;
+    if ROO_HEADER == buffer {
+        Ok(())
+    } else {
+        Err(())
     }
 }
 
@@ -38,16 +34,16 @@ fn archive() {
     //Create archive file with file_name
     let mut archive_file = File::create("test.roo").unwrap();
     let result = archive_file.write(ROO_HEADER.as_bytes());
-    let check = check_header(archive_file);
-    if check != 1 {
-        println!("Writing header failed. Aborting.");
-        process::exit(1);
-    }
-    else{
-        println!("Header wrote sucessfully");
-    }
 
+	match check_header(ROO_HEADER.as_bytes(), archive_file) {
+        Ok(_) => { println!("Header wrote sucessfully"); },
+        Err(_) => {
+            println!("Writing header failed. Aborting.");
+            process::exit(1);
+        }
+     }
 }
+
 /*
 fn extract() {
 
