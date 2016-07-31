@@ -21,8 +21,7 @@ fn check_header<R: Read + Seek>(mut input: R) -> Result<bool,std::io::Error>{
     //Read in exactly length of header bytes
     try!(input.read_exact(&mut buffer));
     //convert buffer to str
-    let header = unsafe { str::from_utf8_unchecked(&buffer[..]) };
-
+    let header = str::from_utf8(&buffer[..]).unwrap() ;
     println!("Buffer: {}", header);
     //If the header exists and is correct
     Ok(ROO_HEADER == header)
