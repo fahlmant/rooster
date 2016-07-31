@@ -14,21 +14,27 @@ const ROO_HEAD_LEN: usize = 11;
 
 fn check_header<R: Read + Seek>(mut input: R) -> Result<bool,std::io::Error>{
 
+    //Create a buffer to read in the header
     let mut buffer = [0; ROO_HEAD_LEN];
+    //Seek to start of file
     try!(input.seek(SeekFrom::Start(0)));
+    //Read in exactly length of header bytes
     try!(input.read_exact(&mut buffer));
+    //convert buffer to str
     let header = unsafe { str::from_utf8_unchecked(&buffer[..]) };
 
-    println!("Buffer: {:?}", header);
-    println!(" match? {} ", ROO_HEADER == header);
+    println!("Buffer: {}", header);
     //If the header exists and is correct
     Ok(ROO_HEADER == header)
 }
 
 fn archive(file_name: &str) {
 
+    //Create the archive and write the header to the top
     let mut archive_file = File::create(file_name).unwrap();
     let result = archive_file.write(ROO_HEADER.as_bytes());
+
+    //Open and check to make sure the header wrote sucessfully
     match File::open(file_name) {
         Ok(mut archive_file) => {
         	//match check_header(Cursor::new(&archive_file[..])) {
