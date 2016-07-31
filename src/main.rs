@@ -12,10 +12,10 @@ static ROO_HEADER: &'static str = "!<rooster>\n";
 //Rooster header byte length
 const ROO_HEAD_LEN: usize = 11;
 
-fn check_header<R: Read>(mut input: R) -> Result<(),()>{
+fn check_header<R: Read + Seek>(mut input: R) -> Result<(),()>{
 
     let mut buffer = [0; 11];
-    file.seek(SeekFrom::Start(0));
+    input.seek(SeekFrom::Start(0));
     if let Err(_) = input.read_exact(&mut buffer) {
         return Err(());
     }
@@ -35,7 +35,7 @@ fn archive() {
     let mut archive_file = File::create("test.roo").unwrap();
     let result = archive_file.write(ROO_HEADER.as_bytes());
 
-	match check_header(ROO_HEADER.as_bytes(), archive_file) {
+	match check_header(archive_file) {
         Ok(_) => { println!("Header wrote sucessfully"); },
         Err(_) => {
             println!("Writing header failed. Aborting.");
