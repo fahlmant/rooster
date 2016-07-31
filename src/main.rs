@@ -1,7 +1,8 @@
 extern crate getopts;
 use getopts::Options;
+use std::env;
 use std::io::prelude::*;
-use std::io::SeekFrom;
+use std::io::{Cursor, SeekFrom};
 use std::fs::File;
 use std::process;
 use std::str;
@@ -11,36 +12,44 @@ static ROO_HEADER: &'static str = "!<rooster>\n";
 //Rooster header byte length
 const ROO_HEAD_LEN: usize = 11;
 
-fn check_header<R: Read + Seek>(mut input: R) -> Result<(),()>{
+fn check_header<R: Read + Seek>(mut input: R) -> Result<bool,std::io::Error>{
 
     let mut buffer = [0; ROO_HEAD_LEN];
-    input.seek(SeekFrom::Start(0));
-    if let Err(_) = input.read_exact(&mut buffer) {
-        return Err(());
-    }
+    try!(input.seek(SeekFrom::Start(0)));
+    try!(input.read_exact(&mut buffer));
     let header = unsafe { str::from_utf8_unchecked(&buffer[..]) };
-    println!("Buffer: {}", header);
+
+    println!("Buffer: {:?}", header);
+    println!(" match? {} ", ROO_HEADER == header);
     //If the header exists and is correct
-    if ROO_HEADER == header {
-        Ok(())
-    } else {
-        Err(())
-    }
+    Ok(ROO_HEADER == header)
 }
 
-fn archive() {
+fn archive(file_name: &str) {
 
-    //Create archive file with file_name
-    let mut archive_file = File::create("test.roo").unwrap();
+    let mut archive_file = File::create(file_name).unwrap();
     let result = archive_file.write(ROO_HEADER.as_bytes());
-
-	match check_header(archive_file) {
-        Ok(_) => { println!("Header wrote sucessfully"); },
-        Err(_) => {
-            println!("Writing header failed. Aborting.");
+    match File::open(file_name) {
+        Ok(mut archive_file) => {
+        	//match check_header(Cursor::new(&archive_file[..])) {
+            match check_header(&mut archive_file) {
+                Ok(ok) => { 
+                    if ok { println!("Header wrote sucessfully"); }
+                    else {
+                        println!("Writing header failed. Aborting.");
+                        process::exit(1);
+                    }
+                },
+                Err(err) => {
+                    println!("I/O error while checking header: {}", err);
+                    process::exit(1);
+                }
+            } },
+        Err(err) => {
+            println!("Error opening test archive \"{}\": {}", file_name, err);
             process::exit(1);
-        }
-     }
+            }
+    }
 }
 
 /*
@@ -107,7 +116,7 @@ fn main() {
 
     let output = matches.opt_str("a");
     if !matches.free.is_empty() {
-        archive();
+        archive("test.roo");
     }
     else {
         println!("Usage: rooster -a <archive_name>.roo <files_to_archive>");
