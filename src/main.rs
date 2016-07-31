@@ -12,17 +12,17 @@ static ROO_HEADER: &'static str = "!<rooster>\n";
 //Rooster header byte length
 const ROO_HEAD_LEN: usize = 11;
 
-fn check_header<R: Read>(mut input: R, mut file: File) -> Result<(),()>{
+fn check_header<R: Read>(mut input: R) -> Result<(),()>{
 
     let mut buffer = [0; 11];
     file.seek(SeekFrom::Start(0));
-    file.read_exact(&mut buffer);
-    let mut buffer = str::from_utf8(&buffer).unwrap();
-    println!("Buffer: {}", buffer);
-//    buffer = ROO_HEADER;
-    println!(" {} ", ROO_HEADER == buffer);
+    if let Err(_) = input.read_exact(&mut buffer) {
+        return Err(());
+    }
+    let header = unsafe { str::from_utf8_unchecked(&buffer[..]) };
+    println!("Buffer: {}", header);
     //If the header exists and is correct
-    if ROO_HEADER == buffer {
+    if ROO_HEADER == header {
         Ok(())
     } else {
         Err(())
