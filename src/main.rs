@@ -1,6 +1,5 @@
 extern crate getopts;
 use getopts::Options;
-use std::env;
 use std::io::prelude::*;
 use std::io::SeekFrom;
 use std::fs::File;
@@ -14,7 +13,7 @@ const ROO_HEAD_LEN: usize = 11;
 
 fn check_header<R: Read + Seek>(mut input: R) -> Result<(),()>{
 
-    let mut buffer = [0; 11];
+    let mut buffer = [0; ROO_HEAD_LEN];
     input.seek(SeekFrom::Start(0));
     if let Err(_) = input.read_exact(&mut buffer) {
         return Err(());
