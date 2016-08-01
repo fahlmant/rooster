@@ -106,3 +106,5 @@ Contributing
 ============
 
 TBD
+
+GPG test
