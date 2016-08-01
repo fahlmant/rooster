@@ -2,7 +2,7 @@ extern crate getopts;
 use getopts::Options;
 use std::env;
 use std::io::prelude::*;
-use std::io::{Cursor, SeekFrom};
+use std::io::SeekFrom;
 use std::fs::File;
 use std::process;
 use std::str;
@@ -11,6 +11,12 @@ use std::str;
 static ROO_HEADER: &'static str = "!<rooster>\n";
 //Rooster header byte length
 const ROO_HEAD_LEN: usize = 11;
+//Rooster struct
+
+struct ROO_DATA {
+
+}
+
 
 fn check_header<R: Read + Seek>(mut input: R) -> Result<bool,std::io::Error>{
 
@@ -55,6 +61,8 @@ fn archive(file_name: &str) {
             process::exit(1);
             }
     }
+
+    
 }
 
 /*
