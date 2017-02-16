@@ -1,12 +1,71 @@
 extern crate getopts;
 use getopts::Options;
 use std::env;
+use std::io::prelude::*;
+use std::io::SeekFrom;
+use std::fs::File;
 use std::process;
-/*
-fn archive() {
+use std::str;
+
+//Rooster header
+static ROO_HEADER: &'static str = "!<rooster>\n";
+//Rooster header byte length
+const ROO_HEAD_LEN: usize = 11;
+//Rooster struct
+
+struct ROO_DATA {
 
 }
 
+
+fn check_header<R: Read + Seek>(mut input: R) -> Result<bool,std::io::Error>{
+
+    //Create a buffer to read in the header
+    let mut buffer = [0; ROO_HEAD_LEN];
+    //Seek to start of file
+    try!(input.seek(SeekFrom::Start(0)));
+    //Read in exactly length of header bytes
+    try!(input.read_exact(&mut buffer));
+    //convert buffer to str
+    let header = str::from_utf8(&buffer[..]).unwrap() ;
+    println!("Buffer: {}", header);
+    //If the header exists and is correct
+    Ok(ROO_HEADER == header)
+}
+
+fn archive(file_name: &str) {
+
+    //Create the archive and write the header to the top
+    let mut archive_file = File::create(file_name).unwrap();
+    let result = archive_file.write(ROO_HEADER.as_bytes());
+
+    //Open and check to make sure the header wrote sucessfully
+    match File::open(file_name) {
+        Ok(mut archive_file) => {
+        	//match check_header(Cursor::new(&archive_file[..])) {
+            match check_header(&mut archive_file) {
+                Ok(ok) => { 
+                    if ok { println!("Header wrote sucessfully"); }
+                    else {
+                        println!("Writing header failed. Aborting.");
+                        process::exit(1);
+                    }
+                },
+                Err(err) => {
+                    println!("I/O error while checking header: {}", err);
+                    process::exit(1);
+                }
+            } },
+        Err(err) => {
+            println!("Error opening test archive \"{}\": {}", file_name, err);
+            process::exit(1);
+            }
+    }
+
+    
+}
+
+/*
 fn extract() {
 
 }
@@ -27,7 +86,7 @@ fn table_of_contents() {
 fn main() {
 
     let args: Vec<String> = env::args().collect();
-    let program = args[0].clone();
+    //let program = args[0].clone();
 
     let mut opts = Options::new();
     /*Options available
@@ -69,8 +128,8 @@ fn main() {
     }
 
     let output = matches.opt_str("a");
-    let input = if !matches.free.is_empty() {
-        matches.free[0].clone()
+    if !matches.free.is_empty() {
+        archive("test.roo");
     }
     else {
         println!("Usage: rooster -a <archive_name>.roo <files_to_archive>");
